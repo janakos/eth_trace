@@ -6,7 +6,8 @@ resource "aws_lambda_function" "store_traces" {
 
   runtime = "python3.8"
   layers = [aws_lambda_layer_version.store_traces_layer.arn]
-  handler = "lambda.handler"
+  handler = "store_traces.handler"
+  timeout = 30
 
   source_code_hash = data.archive_file.zip_store_traces.output_base64sha256
 
@@ -30,7 +31,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
   name = "lambda_policy"
   role = aws_iam_role.role_for_LDC.id
 
-  policy = file("./dynamodb_policy.json")
+  policy = file("./lambda_policy.json")
 }
 
 
