@@ -1,3 +1,4 @@
+# Create bucket
 resource "random_pet" "lambda_bucket_name" {
   prefix = "terraform"
   length = 4
@@ -10,6 +11,7 @@ resource "aws_s3_bucket" "lambda_bucket" {
   force_destroy = true
 }
 
+# Lambda
 data "archive_file" "zip_store_traces" {
   type = "zip"
 
@@ -31,4 +33,21 @@ resource "aws_s3_bucket_object" "upload_lambda_store_traces" {
   source = data.archive_file.zip_store_traces.output_path
 
   etag = filemd5(data.archive_file.zip_store_traces.output_path)
+}
+
+# Lambda Controller
+data "archive_file" "zip_store_traces_controller" {
+  type = "zip"
+
+  source_file  = "../store_traces_controller.py"
+  output_path = "../zips/store_traces_controller.zip"
+}
+
+resource "aws_s3_bucket_object" "upload_lambda_store_traces_controller" {
+  bucket = aws_s3_bucket.lambda_bucket.id
+
+  key    = "store_traces.zip"
+  source = data.archive_file.zip_store_traces_controller.output_path
+
+  etag = filemd5(data.archive_file.zip_store_traces_controller.output_path)
 }
