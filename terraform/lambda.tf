@@ -31,13 +31,13 @@ resource "aws_iam_role_policy" "lambda_policy" {
   name = "lambda_policy"
   role = aws_iam_role.role_for_LDC.id
 
-  policy = file("./lambda_policy.json")
+  policy = file("./policies/lambda_policy.json")
 }
 
 
 resource "aws_iam_role" "role_for_LDC" {
   name = "lambda_role"
 
-  assume_role_policy = file("./assume_role_policy.json")
+  assume_role_policy = file("./policies/assume_role_policy.json")
 
 }

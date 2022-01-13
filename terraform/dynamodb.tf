@@ -2,17 +2,18 @@ resource "aws_dynamodb_table" "dynamodb-table" {
   name           = "EthTraces"
   billing_mode   = "PROVISIONED"
   read_capacity  = 20
-  write_capacity = 20
-  hash_key       = "BlockNumber"
+  write_capacity = 100
+  hash_key       = "traceHash"
+  range_key      = "blockNumber"
+
 
   attribute {
-    name = "BlockNumber"
-    type = "N"
+    name = "traceHash"
+    type = "S"
   }
-
-  ttl {
-    attribute_name = "TimeToExist"
-    enabled        = false
+  attribute {
+    name = "blockNumber"
+    type = "N"
   }
 
   tags = {
