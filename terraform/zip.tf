@@ -46,7 +46,7 @@ data "archive_file" "zip_store_traces_controller" {
 resource "aws_s3_bucket_object" "upload_lambda_store_traces_controller" {
   bucket = aws_s3_bucket.lambda_bucket.id
 
-  key    = "store_traces.zip"
+  key    = "store_traces_controller.zip"
   source = data.archive_file.zip_store_traces_controller.output_path
 
   etag = filemd5(data.archive_file.zip_store_traces_controller.output_path)

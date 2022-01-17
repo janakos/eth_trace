@@ -7,7 +7,7 @@ resource "aws_lambda_function" "store_traces" {
   runtime = "python3.8"
   layers = [aws_lambda_layer_version.store_traces_layer.arn]
   handler = "store_traces.handler"
-  timeout = 30
+  timeout = 60
 
   source_code_hash = data.archive_file.zip_store_traces.output_base64sha256
 
