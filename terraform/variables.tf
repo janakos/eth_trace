@@ -12,10 +12,4 @@ variable "assume_role_path" {
   default = "./policies/lambda_api_policy.json"
 }
 
-variable "lambda_runtime" {
-  description = "Runtime environment for lambdas"
-
-  type    = string
-  default = var.lambda_runtime
-}
 

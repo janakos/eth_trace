@@ -5,7 +5,7 @@ resource "aws_lambda_function" "store_traces" {
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_bucket_object.upload_lambda_store_traces.key
 
-  runtime = var.lambda_runtime
+  runtime = "python3.8"
   layers = [aws_lambda_layer_version.store_traces_layer.arn]
   handler = "store_traces.handler"
   timeout = 60
@@ -20,7 +20,7 @@ resource "aws_lambda_layer_version" "store_traces_layer" {
   filename   = "../zips/layer_store_traces.zip"
   layer_name = "store_traces_layer"
 
-  compatible_runtimes = [var.lambda_runtime]
+  compatible_runtimes = ["python3.8"]
 }
 
 # Cloudwatch

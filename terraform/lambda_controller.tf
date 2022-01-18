@@ -29,7 +29,7 @@ resource "aws_lambda_function" "store_traces_controller" {
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_bucket_object.upload_lambda_store_traces_controller.key
 
-  runtime = var.lambda_runtime
+  runtime = "python3.8"
   handler = "store_traces_controller.handler"
   timeout = 30
 

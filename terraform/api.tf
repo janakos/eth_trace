@@ -5,7 +5,7 @@ resource "aws_lambda_function" "get_traces" {
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_bucket_object.upload_lambda_get_traces.key
 
-  runtime = var.lambda_runtime
+  runtime = "python3.8"
   handler = "get_traces.handler"
   timeout = 30
 
