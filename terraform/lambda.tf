@@ -1,3 +1,4 @@
+# Set up lambda to read block traces
 resource "aws_lambda_function" "store_traces" {
   function_name = "store_traces"
 

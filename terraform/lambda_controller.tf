@@ -1,3 +1,4 @@
+# SNS topic to store block read requests
 resource "aws_sns_topic" "eth_block_sns" {
   name = "eth_block_topic"
 
@@ -6,6 +7,7 @@ resource "aws_sns_topic" "eth_block_sns" {
   }
 }
 
+# Subscribe trace loading lambda to our SNS topic
 resource "aws_sns_topic_subscription" "invoke_with_sns" {
   topic_arn = aws_sns_topic.eth_block_sns.arn
   protocol  = "lambda"
@@ -20,6 +22,7 @@ resource "aws_lambda_permission" "allow_sns_invoke" {
   source_arn    = aws_sns_topic.eth_block_sns.arn
 }
 
+# Set up lambda to write into SNS topic
 resource "aws_lambda_function" "store_traces_controller" {
   function_name = "store_traces_controller"
 
