@@ -6,10 +6,10 @@ variable "aws_region" {
 }
 
 variable "assume_role_path" {
-  description = "File path for assume role policy"
+  description = "Assume role path"
 
   type    = string
-  default = "./policies/lambda_api_policy.json"
+  default = "./policies/assume_role_policy.json"
 }
 
 
