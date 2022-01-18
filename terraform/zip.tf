@@ -15,14 +15,14 @@ resource "aws_s3_bucket" "lambda_bucket" {
 data "archive_file" "zip_store_traces" {
   type = "zip"
 
-  source_file  = "../store_traces.py"
+  source_file  = "../lambdas/store_traces.py"
   output_path = "../zips/store_traces.zip"
 }
 
 data "archive_file" "zip_store_traces_packages" {
   type = "zip"
 
-  source_file  = "../store_traces.py"
+  source_file  = "../lambdas/store_traces.py"
   output_path = "../zips/store_traces.zip"
 }
 
@@ -39,7 +39,7 @@ resource "aws_s3_bucket_object" "upload_lambda_store_traces" {
 data "archive_file" "zip_store_traces_controller" {
   type = "zip"
 
-  source_file  = "../store_traces_controller.py"
+  source_file  = "../lambdas/store_traces_controller.py"
   output_path = "../zips/store_traces_controller.zip"
 }
 
@@ -56,7 +56,7 @@ resource "aws_s3_bucket_object" "upload_lambda_store_traces_controller" {
 data "archive_file" "zip_get_traces" {
   type = "zip"
 
-  source_file  = "../get_traces.py"
+  source_file  = "../lambdas/get_traces.py"
   output_path = "../zips/get_traces.zip"
 }
 

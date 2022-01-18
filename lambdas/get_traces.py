@@ -4,6 +4,7 @@ import json
 import decimal
 
 
+# Encodes decimals to avoid json parsing error
 class DecimalEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, decimal.Decimal):
@@ -12,22 +13,28 @@ class DecimalEncoder(json.JSONEncoder):
 
 
 def handler(event, context):
+
+    # Connect to dynamo
     dynamodb = boto3.resource('dynamodb')
     ethTraces = dynamodb.Table('EthTraces')
 
-    # List of blocks we want to retreive
+    # Load user desired block range
+    timeline = json.loads(event['body'])
+    start = timeline['startBlock']
+    end = timeline['endBlock']
+
+    # Create results dict
     block_traces = {
         i: None
-        for i in range(event['startBlock'], event['endBlock'] + 1)
+        for i in range(start, end + 1)
     }
+
+    # Query all items per block
     for block in block_traces.keys():
         filtering_exp = Key('blockNumber').eq(block)
-        res = ethTraces.query(KeyConditionExpression=filtering_exp)
-        block_traces[int(block)] = res
-
-    print("hellloo")
-    print(block_traces)
+        resp = ethTraces.query(KeyConditionExpression=filtering_exp)
+        block_traces[block] = resp['Items']
 
     return {
-        'body': json.dumps(block_traces, cls=DecimalEncoder)
+        'body': json.dumps([block_traces], cls=DecimalEncoder)
     }
