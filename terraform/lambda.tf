@@ -5,7 +5,7 @@ resource "aws_lambda_function" "store_traces" {
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_bucket_object.upload_lambda_store_traces.key
 
-  runtime = "python3.8"
+  runtime = var.lambda_runtime
   layers = [aws_lambda_layer_version.store_traces_layer.arn]
   handler = "store_traces.handler"
   timeout = 60
@@ -15,19 +15,22 @@ resource "aws_lambda_function" "store_traces" {
   role = aws_iam_role.role_for_LDC.arn
 }
 
+# Add layer for pythons request library
 resource "aws_lambda_layer_version" "store_traces_layer" {
   filename   = "../zips/layer_store_traces.zip"
   layer_name = "store_traces_layer"
 
-  compatible_runtimes = ["python3.8"]
+  compatible_runtimes = [var.lambda_runtime]
 }
 
+# Cloudwatch
 resource "aws_cloudwatch_log_group" "store_traces_cloudwatch" {
   name = "/aws/lambda/${aws_lambda_function.store_traces.function_name}"
 
   retention_in_days = 30
 }
 
+# Permissions
 resource "aws_iam_role_policy" "lambda_policy" {
   name = "lambda_policy"
   role = aws_iam_role.role_for_LDC.id
@@ -39,6 +42,6 @@ resource "aws_iam_role_policy" "lambda_policy" {
 resource "aws_iam_role" "role_for_LDC" {
   name = "lambda_role"
 
-  assume_role_policy = file("./policies/assume_role_policy.json")
+  assume_role_policy = file(var.assume_role_path)
 
 }

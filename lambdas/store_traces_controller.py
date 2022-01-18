@@ -1,4 +1,3 @@
-import json
 import boto3
 
 
@@ -9,7 +8,7 @@ def handler(event, context):
 
     print(f"Attempting publish of SNS messages for block: {start} - {end}")
     for i in range(start, end + 1):
-        response = client.publish(
+        client.publish(
             TargetArn="arn:aws:sns:us-east-2:888292602105:eth_block_topic",
             Message=str(i)
         )

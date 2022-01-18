@@ -5,7 +5,7 @@ resource "aws_lambda_function" "get_traces" {
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_bucket_object.upload_lambda_get_traces.key
 
-  runtime = "python3.8"
+  runtime = var.lambda_runtime
   handler = "get_traces.handler"
   timeout = 30
 
@@ -14,12 +14,14 @@ resource "aws_lambda_function" "get_traces" {
   role = aws_iam_role.role_for_LDC_api.arn
 }
 
+# Cloudwatch
 resource "aws_cloudwatch_log_group" "get_traces_cloudwatch" {
   name = "/aws/lambda/${aws_lambda_function.get_traces.function_name}"
 
   retention_in_days = 30
 }
 
+# Permissions
 resource "aws_iam_role_policy" "lambda_api_policy" {
   name = "lambda_controller_policy"
   role = aws_iam_role.role_for_LDC_api.id
@@ -31,7 +33,7 @@ resource "aws_iam_role_policy" "lambda_api_policy" {
 resource "aws_iam_role" "role_for_LDC_api" {
   name = "lambda_api_role"
 
-  assume_role_policy = file("./policies/assume_role_policy.json")
+  assume_role_policy = file(var.assume_role_path)
 
 }
 

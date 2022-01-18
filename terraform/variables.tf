@@ -4,3 +4,18 @@ variable "aws_region" {
   type    = string
   default = "us-east-2"
 }
+
+variable "assume_role_path" {
+  description = "File path for assume role policy"
+
+  type    = string
+  default = "./policies/lambda_api_policy.json"
+}
+
+variable "lambda_runtime" {
+  description = "Runtime environment for lambdas"
+
+  type    = string
+  default = var.lambda_runtime
+}
+

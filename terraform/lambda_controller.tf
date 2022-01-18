@@ -29,7 +29,7 @@ resource "aws_lambda_function" "store_traces_controller" {
   s3_bucket = aws_s3_bucket.lambda_bucket.id
   s3_key    = aws_s3_bucket_object.upload_lambda_store_traces_controller.key
 
-  runtime = "python3.8"
+  runtime = var.lambda_runtime
   handler = "store_traces_controller.handler"
   timeout = 30
 
@@ -38,12 +38,14 @@ resource "aws_lambda_function" "store_traces_controller" {
   role = aws_iam_role.role_for_LDC_controller.arn
 }
 
+# Cloudwatch
 resource "aws_cloudwatch_log_group" "store_traces_controller_cloudwatch" {
   name = "/aws/lambda/${aws_lambda_function.store_traces_controller.function_name}"
 
   retention_in_days = 30
 }
 
+# Permissions
 resource "aws_iam_role_policy" "lambda_controller_policy" {
   name = "lambda_controller_policy"
   role = aws_iam_role.role_for_LDC_controller.id
@@ -55,6 +57,6 @@ resource "aws_iam_role_policy" "lambda_controller_policy" {
 resource "aws_iam_role" "role_for_LDC_controller" {
   name = "lambda_controller_role"
 
-  assume_role_policy = file("./policies/assume_role_policy.json")
+  assume_role_policy = file(var.assume_role_path)
 
 }
